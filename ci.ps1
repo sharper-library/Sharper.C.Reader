@@ -2,12 +2,7 @@ $TestsRegex = '\.Tests$'
 
 $dotnetCliUrl = 'https://dotnetcli.blob.core.windows.net/dotnet/preview/Binaries/Latest/dotnet-dev-win-x64.latest.zip'
 
-if (Test-Path '.dotnet-cli/dotnet.exe') {
-    $dotnet = '.dotnet-cli/dotnet.exe'
-}
-else {
-    $dotnet = 'dotnet.exe'
-}
+$dotnet = 'dotnet'
 
 function ExtractZip($srcZip, $destDir) {
     Add-Type -Assembly "System.IO.Compression.FileSystem"
@@ -35,11 +30,11 @@ function CleanCmd() {
 }
 
 function EnsureDotnetCliCmd() {
-    if (!(Test-Path '.dotnet-cli/dotnet.exe'))
+    if (!(Get-Command $dotnet -ErrorAction SilentlyContinue))
     {
         Invoke-WebRequest $dotnetCliUrl -OutFile 'dotnet-cli.zip'
         ExtractZip 'dotnet-cli.zip' "$pwd/.dotnet-cli"
-        $dotnet = '.dotnet-cli/dotnet.exe'
+        $dotnet = '.dotnet-cli/dotnet'
     }
 }
 
@@ -71,7 +66,7 @@ function TestCmd() {
 function RegisterCmd() {
     PackageProjects | %{
         Get-ChildItem -Recurse *.nupkg | %{
-            nuget add $_ -Source "$env:USERPROFILE/.nugetFeed"
+            nuget add $_ -Source "$env:USERPROFILE/.nuget/packages"
         }
     }
 }
@@ -84,7 +79,7 @@ function RunCommand($name) {
         build {BuildCmd}
         test {TestCmd}
         register {RegisterCmd}
-        all {CleanCmd; InstallCmd; BuildCmd; RegisterCmd}
+        all {CleanCmd; EnsureDotnetCliCmd; InstallCmd; BuildCmd; RegisterCmd}
     }
 }
 
