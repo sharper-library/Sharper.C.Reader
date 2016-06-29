@@ -1,0 +1,21 @@
+{
+    "version": "1.0-*",
+    "description": "The Reader type and monad instance",
+    "authors": [
+        "Jeremy Hughes <jedahu@gmail.com>"
+    ],
+    "packOptions": {
+        "projectUrl": "https://github.com/sharper-library/Sharper.C.Reader",
+        "licenseUrl": "https://raw.githubusercontent.com/sharper-library/Sharper.C.Reader/master/LICENSE.txt"
+    },
+    "dependencies": {
+        "System.Diagnostics.TraceSource": "4.0.0"
+    },
+    "frameworks": {
+        "netstandard1.3": {
+            "dependencies": {
+                "NETStandard.Library": "1.5.0-*"
+            }
+        }
+    }
+}
