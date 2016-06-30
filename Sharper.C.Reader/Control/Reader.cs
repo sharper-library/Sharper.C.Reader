@@ -13,6 +13,9 @@ namespace Sharper.C.Control
 
         public static Reader<R, R> Ask<R, A>()
         =>  new Reader<R, R>(r => r);
+
+        public static Reader<R, A> Join<R, A>(this Reader<R, Reader<R, A>> x)
+        =>  new Reader<R, A>(r => x.Run(r).Run(r));
     }
 
     public struct Reader<R, A>
