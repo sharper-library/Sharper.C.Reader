@@ -3,6 +3,18 @@ using System.Diagnostics;
 
 namespace Sharper.C.Control
 {
+    public static class Reader
+    {
+        public static Reader<R, A> Mk<R, A>(Func<R, A> run)
+        =>  new Reader<R, A>(run);
+
+        public static Reader<R, A> Pure<R, A>(A a)
+        =>  new Reader<R, A>(_ => a);
+
+        public static Reader<R, R> Ask<R, A>()
+        =>  new Reader<R, R>(r => r);
+    }
+
     public struct Reader<R, A>
     {
         private readonly Func<R, A> run;
